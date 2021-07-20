@@ -1,0 +1,118 @@
+https://www.shadertoy.com/view/7lXXRs
+
+//GPR 200-01
+//Andrew O'Leary
+//Lab2
+//GLSL effects
+
+
+//GLSL OpenGL Shading Language
+//fragColor is Output RGBA 0-1
+//fragCoord is location in image in pixels
+
+vec4 Effect0 (in vec2 fragCoord, in vec2 Resolution){
+    return vec4(fragCoord/Resolution.xy,0.0,1.0); //Postion of the pixel in respect to the resolution deterins the red/green scale
+    
+}
+vec4 Effect1 (in vec2 fragCoord, in vec2 Resolution){
+    vec2 uv=fragCoord/Resolution;
+   float col= floor(uv.x*14.0);//set the size for a collum
+   float row= floor(uv.y*14.0);//set the size for a row
+   //mod-remainder 
+  if(mod(col+row,2.0)==0.0){//if the size of the row and collum have not been reached continue witht he same color
+   
+    return vec4(1.0,1.0,1.0,1.0);
+    }
+    else{
+    return vec4(0.0,0.0,0.0,1.0);
+    }
+    
+    
+}
+vec4 Effect2 (in vec2 fragCoord, in vec2 Resolution, float t){
+    //define "circle" as origin and raduis
+    vec2 uv=fragCoord/Resolution;
+    //known 
+    // current location = fragCoord
+    // raduis change due to time
+    float radius = (.5*cos(t));
+    float color1 = cos(t);
+    float color2 = sin(t);
+    //origin
+    vec2 origin = vec2(0.5,0.3);
+    //if pixel is within circle 
+    //then draw circle color
+    //else background
+    vec2 diff = (uv-origin);
+    if(dot(diff,diff)<= radius * radius){
+    //if(length(uv-origin)<radius){//inefficent
+    //red is set while green and blue are changing due time
+    return vec4(.25,color2,color1,1.0);
+
+    }
+    else{
+    return vec4(0.5,0.0,0.0,1.0);
+
+    }
+    
+}
+vec4 Effect3 (in vec2 fragCoord, in vec2 Resolution, float t){
+    //define "circle" as origin and raduis
+    vec2 uv=fragCoord/Resolution;
+    //known 
+    // current location = fragCoord
+    // raduis change due to time
+    float radius = (.25*cos(t));
+    float color1 = cos(t);
+    float color2 = sin(t);
+    float col= floor(uv.x*14.0);//set the size for a collum
+   float row= floor(uv.y*14.0);//set the size for a row
+    //origin
+    float oPosX=((cos(t)*.5)+.4);//set Origin x to change due to time
+    float oPosY=((sin(t)*.15)+.3);//set Origin y to change due to time
+    vec2 origin = vec2(oPosX,oPosY);
+    //if pixel is within circle 
+    //then draw circle color
+    //else background
+    vec2 diff = (uv-origin);
+    
+    if(dot(diff,diff)<= radius * radius){
+    //if(length(uv-origin)<radius){//inefficent
+    //red is set while green and blue are changing due time
+    return vec4(.25,color2,color1,1.0);
+
+    }
+    else{//change the background to the checkered pattern
+    if(mod(col+row,2.0)==0.0){//if the size of the row and collum have not been reached continue witht he same color
+   
+    return vec4(color2,1.0,1.0,1.0);//set red value to change with time
+    }
+    else{
+    return vec4(0.0,0.0,color2,1.0);// set the blue value to change with time
+    }
+    }
+    
+    
+}
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+//solid red
+//fragColor= vec4(1.0,0.0,0.0,1.0);
+
+
+
+//fragColor= Effect2(fragCoord,iResolution.xx,iTime);
+//fragColor= Effect0(fragCoord,iResolution.xy);
+//fragColor= Effect1(fragCoord,iResolution.xx);
+fragColor= Effect3(fragCoord,iResolution.xx,iTime);
+/*
+    // Normalized pixel coordinates (from 0 to 1)
+    vec2 uv = fragCoord/iResolution.xy;
+
+    // Time varying pixel color
+    vec3 col = 0.5 + 0.5*cos(iTime+uv.xyx+vec3(0,2,4));
+
+    // Output to screen
+    fragColor = vec4(col,1.0);
+    */
+}
