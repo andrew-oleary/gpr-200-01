@@ -1,0 +1,119 @@
+Andrew O'Leary
+gpr 200-01
+lab5BuFC
+
+/*convolution 5x5
+1  4  6  4  1
+4 16 24 16  4
+6 24 36 24  6
+4 16 24 16  4
+1  4  6  4  1
+
+out of 256
+
+*/
+
+//color4 blur(sampler3d cube,in sViewport vp)
+//{
+//color4 color;
+
+    
+//}
+
+
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    // viewport info
+    sViewport vp;
+
+    // ray
+    sRay ray;
+
+	//get +2 and -2 of fragCoord
+    vec2 temp1= vec2(fragCoord.x++,fragCoord.y++);
+    vec2 temp2= vec2(fragCoord.x--,fragCoord.y--);
+
+    //get all 25 coords
+
+    sCoord uv1 = (vec2(temp2.x--,temp2.y--)/ iChannelResolution[0].xy);
+    sCoord uv2 = (vec2(temp2.x--,temp2.y)/ iChannelResolution[0].xy);
+    sCoord uv3 = (vec2(temp2.x--,fragCoord)/ iChannelResolution[0].xy);
+    sCoord uv4 = (vec2(temp2.x--,temp1.y)/ iChannelResolution[0].xy);
+    sCoord uv5 = (vec2(temp2.x--,temp1.y++)/ iChannelResolution[0].xy);
+    
+    sCoord uv6 = (vec2(temp2.x,temp2.y--)/ iChannelResolution[0].xy);
+    sCoord uv7 = (vec2(temp2.x,temp2.y)/ iChannelResolution[0].xy);
+    sCoord uv8 = (vec2(temp2.x,fragCoord.y)/ iChannelResolution[0].xy);
+    sCoord uv9 = (vec2(temp2.x,temp1.y)/ iChannelResolution[0].xy);
+    sCoord uv10 = (vec2(temp2.x,temp1.y++)/ iChannelResolution[0].xy);
+    
+    sCoord uv11 = (vec2(fragCoord.x,temp2.y--)/ iChannelResolution[0].xy);
+    sCoord uv12 = (vec2(fragCoord.x,temp2.y)/ iChannelResolution[0].xy);
+    sCoord uv13 = (vec2(fragCoord.x,fragCoord)/ iChannelResolution[0].xy);
+    sCoord uv14 = (vec2(fragCoord.x,temp1.y)/ iChannelResolution[0].xy);
+    sCoord uv15 = (vec2(fragCoord.x,temp1.y++)/ iChannelResolution[0].xy);
+    
+    sCoord uv16 = (vec2(temp1.x,temp2.y--)/ iChannelResolution[0].xy);
+    sCoord uv17 = (vec2(temp1.x,temp2.y)/ iChannelResolution[0].xy);
+    sCoord uv18 = (vec2(temp1.x,fragCoord)/ iChannelResolution[0].xy);
+    sCoord uv19 = (vec2(temp1.x,temp1.y)/ iChannelResolution[0].xy);
+    sCoord uv20 = (vec2(temp1.x,temp1.y++)/ iChannelResolution[0].xy);
+    
+    sCoord uv21 = (vec2(temp1.x--,temp2.y--)/ iChannelResolution[0].xy);
+    sCoord uv22 = (vec2(temp1.x--,temp2.y)/ iChannelResolution[0].xy);
+    sCoord uv23 = (vec2(temp1.x--,fragCoord)/ iChannelResolution[0].xy);
+    sCoord uv24 = (vec2(temp1.x--,temp1.y)/ iChannelResolution[0].xy);
+    sCoord uv25 = (vec2(temp1.x--,temp1.y++)/ iChannelResolution[0].xy);
+    
+    //get the color for each coord and times it by its importance out of 256
+	/*convolution 5x5
+	1  4  6  4  1
+	4 16 24 16  4
+	6 24 36 24  6
+	4 16 24 16  4
+	1  4  6  4  1
+
+	out of 256
+
+	*/
+    color4 total=(texture(iChannel0, uv1)*0.0039);//1/256
+    total+=(texture(iChannel0, uv2)*0.0156);//4/256
+    total+=(texture(iChannel0, uv3)*0.0234);//6/256
+    total+=(texture(iChannel0, uv5)*0.0039);//1/256
+    total+=(texture(iChannel0, uv4)*0.0156);//4/256
+    
+    total+=(texture(iChannel0, uv6)*0.0156);//4/256
+    total+=(texture(iChannel0, uv7)*0.0625);//16/256
+    total+=(texture(iChannel0, uv8)*0.0937);//24/256
+    total+=(texture(iChannel0, uv10)*0.0156);//4/256
+    total+=(texture(iChannel0, uv9)*0.0625);//16/256
+    
+    total+=(texture(iChannel0, uv11)*0.0234);//6/256
+    total+=(texture(iChannel0, uv12)*0.0937);//24/256
+    total+=(texture(iChannel0, uv13)*0.1406);//36/256
+    total+=(texture(iChannel0, uv15)*0.0234);//6/256
+    total+=(texture(iChannel0, uv14)*0.0937);//24/256
+    
+    total+=(texture(iChannel0, uv16)*0.0156);//4/256
+    total+=(texture(iChannel0, uv17)*0.0625);//16/256
+    total+=(texture(iChannel0, uv18)*0.0937);//24/256
+    total+=(texture(iChannel0, uv20)*0.0156);//4/256
+    total+=(texture(iChannel0, uv19)*0.0625);//16/256
+    
+    total=(texture(iChannel0, uv21)*0.0039);//1/256
+    total+=(texture(iChannel0, uv22)*0.0156);//4/256
+    total+=(texture(iChannel0, uv23)*0.0234);//6/256
+    total+=(texture(iChannel0, uv25)*0.0039);//1/256
+    total+=(texture(iChannel0, uv24)*0.0156);//4/256
+    
+    
+    
+    // uv0 = (vec2(fragCoord.x+1.0),((fragCoord.y+2.0) / iChannelResolution[0].xy);
+//sCoord uv0 = (vec2(fragCoord.x),((fragCoord.y+2.0) / iChannelResolution[0].xy);
+
+    
+
+    //this is not Optimize nor do I think its right  
+    fragColor = total;
+}

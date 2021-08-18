@@ -1,0 +1,33 @@
+Andrew O'Leary
+gpr 200-01
+lab5BuFB
+
+color4 calcColor(in sViewport vp, in sRay ray, in color4 color)
+{
+//bright pass
+//take darks and darken them
+    float brightness=dot(color.xyz, vec3(0.8, 0.8, 0.8));
+ if (brightness>0.7)
+ {
+     return color.xyzw;
+ }
+ else
+ {
+ return color4(color.xyz-vec3(0.5),color.w);
+ }
+ 
+}
+
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    
+    // viewport info
+    sViewport vp;
+
+    // ray
+    sRay ray;
+    sCoord uv0 = fragCoord / iChannelResolution[0].xy;
+    color4 color=texture(iChannel0, uv0);
+    fragColor = calcColor( vp,  ray,color);
+}
