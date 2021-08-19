@@ -1,0 +1,29 @@
+//Andrew O'Leary
+//gpr200-01
+//final pScene ps
+
+#version 450
+//must have same type and name
+in vec4 vColor;
+in vec2 texCoord;
+layout(location=0)
+	out vec4 cfragColor;
+uniform sampler2D uTexture;	
+uniform sampler2D uTexture1;
+uniform vec4 uMouse;
+void main()
+{
+//change from a textured object to a soild color based off of mouse position
+	if(uMouse.x<0.15)
+	{
+	cfragColor=vColor*texture(uTexture1,texCoord*4);//texCoord*4 makes a darkened ring effect because of the texture repeating
+	}
+	else if(uMouse.x>0.85)
+	{
+		cfragColor=vColor*texture(uTexture1,texCoord*4);
+	}
+	else
+	{
+	cfragColor=vColor;
+	}
+}

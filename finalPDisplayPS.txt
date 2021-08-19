@@ -1,0 +1,34 @@
+//Andrew O'Leary
+//gpr200-01
+//final pDisplay ps
+
+
+#version 450
+
+in vec2 vTexCoord;
+layout (binding=0)uniform sampler2D uTex;
+layout (binding=1)uniform sampler2D uTex1;
+layout (binding=2)uniform sampler2D uTex2;
+layout (binding=2)uniform sampler2D uTex3;
+uniform vec2 mPos;
+layout (location=0)out vec4 cfragColor;
+void main()
+{
+	//based off the quadrant the mouse is in change the shader path displayed
+	if(mPos.x>0.5&&mPos.y<0.5)
+	{
+	cfragColor = texture(uTex1,vTexCoord); 
+	}
+	else if(mPos.x<0.5&&mPos.y<0.5)
+	{
+	cfragColor = texture(uTex2,vTexCoord); 
+	}
+	else if(mPos.x>0.5&&mPos.y>0.5)
+	{
+	cfragColor = texture(uTex3,vTexCoord); 
+	}
+	else
+	{
+	cfragColor = texture(uTex,vTexCoord); 
+	}  
+}

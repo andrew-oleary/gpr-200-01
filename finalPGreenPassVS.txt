@@ -1,0 +1,14 @@
+//Andrew O'Leary
+//gpr200-01
+//final pGreenPass vs
+
+
+#version 450
+out vec2 vTexCoord;
+layout(location=0) in vec4 aPosition;
+void main()
+{
+ 
+	gl_Position =aPosition;
+	vTexCoord=aPosition.xy*0.5+0.5;
+}

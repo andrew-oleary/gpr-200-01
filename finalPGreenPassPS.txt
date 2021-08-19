@@ -1,0 +1,26 @@
+//Andrew O'Leary
+//gpr200-01
+//final pGreenPass ps
+
+
+#version 450
+
+in vec2 vTexCoord;
+layout(binding=0) uniform sampler2D uTex;
+
+layout (location=0)out vec4 cfragColor;
+vec4 nightVision(vec4 color)
+{
+vec3 final;
+vec3 brightPass=vec3(0.6, 0.6, 0.2);// the blue value tends to be the darkest on the object. 
+									//if its not set low the whole image will be bright
+	float lum = dot(color.xyz,brightPass);
+ 	final.xyz=vec3(0.0,lum,0.0);//only return the new green value
+ 	return vec4(final,1.0);
+}
+void main()
+{
+
+	vec4 color = texture(uTex, vTexCoord);
+	cfragColor = nightVision(color);
+}
